@@ -1,0 +1,60 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: html-app
+  namespace: env-dev
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: html-app # has to match .spec.template.metadata.labels
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: html-app # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: html-app
+        image: qedzone/html-app:latest
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "100Mi"
+        ports:
+        - containerPort: 80
+          protocol: TCP
+          name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: html-app
+  namespace: env-dev
+spec:
+  selector:
+    app: html-app
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80
+    protocol: TCP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: html-app
+  namespace: env-dev
+spec:
+  rules:
+  - host: html-app.local
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: html-app
+          servicePort: 80
