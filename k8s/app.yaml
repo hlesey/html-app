@@ -1,13 +1,13 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: html-app
+  name: html-app-dev
   namespace: env-prod
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: html-app # has to match .spec.template.metadata.labels
+      app: html-app-dev # has to match .spec.template.metadata.labels
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -16,10 +16,10 @@ spec:
   template:
     metadata:
       labels:
-        app: html-app # has to match .spec.selector.matchLabels
+        app: html-app-dev # has to match .spec.selector.matchLabels
     spec:
       containers:
-      - name: html-app
+      - name: html-app-dev
         image: qedzone/html-app:dev
         resources:
           requests:
@@ -33,11 +33,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: html-app
+  name: html-app-dev
   namespace: env-prod
 spec:
   selector:
-    app: html-app
+    app: html-app-dev
   ports:
   - name: http
     port: 80
@@ -47,14 +47,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: html-app
+  name: html-app-dev
   namespace: env-prod
 spec:
   rules:
-  - host: html-app.local
+  - host: html-app-dev.local
     http:
       paths:
       - path: /
         backend:
-          serviceName: html-app
+          serviceName: html-app-dev
           servicePort: 80
