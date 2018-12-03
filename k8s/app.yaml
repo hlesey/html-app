@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: html-app
-        image: qedzone/html-app:latest
+        image: qedzone/html-app:prod
         resources:
           requests:
             cpu: "100m"
