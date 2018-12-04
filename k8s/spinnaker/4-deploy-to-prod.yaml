@@ -11,7 +11,6 @@
         targetPort: 80
     selector:
       app: html-app
----
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -43,7 +42,6 @@
               requests:
                 cpu: 100m
                 memory: 100Mi
----
 - apiVersion: networking.istio.io/v1alpha3
   kind: VirtualService
   metadata:
